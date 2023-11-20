@@ -1,0 +1,16 @@
+baseURL = 'https://example.org/'
+title = 'web site :)'
+languageCode = 'en-us'
+[module]
+    [[module.imports]]
+    path = "github.com/adityatelange/hugo-PaperMod"
+[markup.goldmark.renderer]
+  unsafe = true
+
+[params.homeInfoParams]
+Title = """
+"how do i use nixos?" 🥺
+"""
+Content = """
+NixOS is hard. Maybe it is bad to use. I am unemployed, so I figured out how to do some stuff. This is where I post about it.
+"""

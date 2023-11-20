@@ -1,0 +1,100 @@
+:PROPERTIES:
+:ID:       03464369-4a57-478c-ba60-ddf5290f0717
+:END:
+#+title: All Posts
+#+hugo_base_dir: ../
+* DONE How to use =sops-nix= to manage secrets on NixOS :nixos:security:ATTACH:howto:
+CLOSED: [2023-11-19 Sun 20:05]
+:PROPERTIES:
+:Added:    [2023-10-03 Tue 17:32]
+:ID:       dac881f2-0e60-4644-8628-b208557b5418
+:LINK:     https://github.com/Mic92/sops-nix
+:EXPORT_OPTIONS: toc:nil date:nil author:nil \n
+:EXPORT_FILE_NAME: ./sops-nix
+:ORG_ATTACH_FILES: sops-nix.pdf
+:END:
+:LOGBOOK:
+- State "DONE"       from              [2023-11-19 Sun 20:05]
+- Refiled on [2023-11-19 Sun 20:02]
+:END:
+
+- Make .sops.yaml file with your hosts public key of choice (you can use age, or ssh-age)
+- Make a =secrets/= dir and add any =secret.yaml= to it
+  - To make a secret.yaml, set your =$EDITOR= and then run =sops /path/to/secret.yaml=.
+- Add any client (machine to be deployed to) machine's ssh-to-age public key to =keys:=
+  - If using =ssh-to-age=, make sure to use the =/etc/ssh/ssh_host_ed25519_key.pub= file as the public key
+    Neither the authorized_keys.d file nor any other public key will be dedicated automatically by sops without more configuration (as of [2023-10-03 Tue 17:38])
+- Add the clients name to =key_groups: -age:=
+- [?] If you are adding new keys, make sure to run =sops updatekeys filename= to update the recipients of each secret
+  + Not sure if this is necessary tbh. I did have to do it at one point, but who knows if you need to do this on new files created.
+- Add =sops.defaultSopsFile = /path/to/secret.yaml;= to configuration.nix
+- Add =sops.age.keyFile = /path/to/age/keys.txt;= to configuration.nix
+  + Frequently, this will be =/home/username/.config/sops/age/keys.txt;=
+- *For each secret "key_name" in secret.yaml* add =sops.secrets.key_name = { };= to configuration.nix
+- At runtime, secrets are placed in plaintext files in =/run/secrets=
+- Refer to secrets by using ="${builtins.readFile /run/secrets/secretname}"=
+  This is using /string interpolation/ and a builtin "read form file" function to get the contents of the plaintext secrets
+- As of time of writing ([2023-10-03 Tue 17:41]) I still don't understand services.
+* DONE "how do i use nixos?" 🥺
+CLOSED: [2023-11-19 Sun 21:28]
+:PROPERTIES:
+:ID:       9e1967c9-4857-4e1f-8ef2-882a5c67500f
+:EXPORT_HUGO_TYPE: homepage
+:EXPORT_FILE_NAME: ./_index
+:END:
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2023-11-19 Sun 21:28]
+:END:
+NixOS is hard. Maybe it is bad to use. I am unemployed, so I figured out how to do some stuff. This is where I post about it.
+* DONE How to actually exchange SSH keys (passwordless SSH) :linux:howto:
+CLOSED: [2023-11-19 Sun 20:05]
+:PROPERTIES:
+:Added: [2023-11-19 Sun 09:17]
+:EXPORT_FILE_NAME: ./ssh-keys
+:ID:       0a937d68-0ea5-4bf4-90a9-d699e88947a6
+:END:
+:LOGBOOK:
+- State "DONE"       from              [2023-11-19 Sun 20:05]
+- Refiled on [2023-11-19 Sun 20:02]
+:END:
+SSH should be 1-to-1 for device-to-key
+1. Run ~ssh-keygen -t ed25519 -N ''~ to generate /one unique key/ per machine, do not overwrite!
+   + You should probably use the type of key in this command, see [[https://wiki.archlinux.org/title/SSH_keys#Ed25519][the archwiki]] and surrounding discussion for more details
+2. ~ssh-copy-id user@host~ for the user and host you want to log into
+3. Do the same thing from the other machine
+
+You should now be able to login to either machine from the other without requiring a password.
+* DONE Using ~deploy-rs~ with a conventional Nix flake configuration system :nixos:howto:
+CLOSED: [2023-11-19 Sun 20:05]
+:PROPERTIES:
+:Added: [2023-11-19 Sun 12:20]
+:EXPORT_FILE_NAME: ./deploy-rs
+:ID:       b349af53-bb24-4813-87a9-2e87fd82f417
+:END:
+:LOGBOOK:
+- State "DONE"       from              [2023-11-19 Sun 20:05]
+- Refiled on [2023-11-19 Sun 20:02]
+:END:
+1. [[id:0a937d68-0ea5-4bf4-90a9-d699e88947a6][Exchange SSH keys]] between the appropriate users (root on the target machine, if you intend to use ~nixpkgs.lib.nixosSystem~-created configurations).
+2. Add a ~deploy~ output like:
+   #+begin_src nix
+    deploy.nodes = {
+    host_name = {
+        hostname = "${builtins.readFile /run/secrets/host_name_ip}";
+        profiles.system = {
+        user = "root";
+        path = deploy-rs.lib.x86_64-linux.activate.nixos
+            self.nixosConfigurations.host_name;
+        };
+    };
+    # ... more nodes ...
+    };
+   #+end_src
+   - The ~builtins...~ interpolation isn't needed if you don't manage your secrets appropriately with ~sops-nix~.
+3. Add ~deploy-rs~ as a flake input the usual way
+4. Add the ~deploy-rs~ binary *from the flake input* like you would with other flake-installed binaries (thorium, etc.)
+   - If you just use the ~deploy-rs~ that comes with ~nixpkgs~ or a random ~nix-shell~, you will have a ton of weird issues
+5. Use ~sudo deploy . -- --impure~ to deploy to your machines
+   - ~sudo~ is only necessary if you need to deploy secrets kept in /run, like with ~sops-nix~ (since /run needs root access to read from)
+   - ~-- --impure~ is only necessary if you have flake impurities (like sops secrets)
+     + The extra ~--~ is to tell ~deploy-rs~ that you are trying to pass the argument ~--impure~ to the underlying ~nixos-rebuild~ call. See ~deploy --help~.
