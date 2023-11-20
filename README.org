@@ -11,35 +11,11 @@ Remember to export org files with ~ox-hugo~ when finished writing!
 :ID:       151f981c-0a74-43b4-9111-6e56816e6b77
 :END:
 - ~go~
-** TODO Make this a flake with direnv etc
-:PROPERTIES:
-:ID:       0f97d5cf-27de-4f09-bb8c-e326f0dd1c44
-:END:
-:LOGBOOK:
-- State "TODO"       from              [2023-11-19 Sun 22:48]
-:END:
+- [ ] Make this a flake with direnv etc
 * Wishlist
 :PROPERTIES:
 :ID:       00e74100-eacd-473e-9c0a-a7aa1a45af9c
 :END:
-** [ ] Working [[file:~/git/hugo-PaperMod/content/posts/papermod/papermod-features/index.md::Search Page][search]]
-:PROPERTIES:
-:ID:       dc96ae48-b07f-4e95-a14f-e8bd4404a761
-:END:
-:LOGBOOK:
-- State "[ ]"        from              [2023-11-19 Sun 22:49]
-:END:
-** [ ] Tags/categories filtering
-:PROPERTIES:
-:ID:       6579ebca-fa8a-423c-aada-018fbb298828
-:END:
-:LOGBOOK:
-- State "[ ]"        from              [2023-11-19 Sun 22:50]
-:END:
-** [ ] More cute stuff
-:PROPERTIES:
-:ID:       145b742c-5f09-4e92-8bec-3297fe8b16f2
-:END:
-:LOGBOOK:
-- State "[ ]"        from              [2023-11-19 Sun 22:50]
-:END:
+- [ ] Working [[file:~/git/hugo-PaperMod/content/posts/papermod/papermod-features/index.md::Search Page][search]]
+- [ ] Tags/categories filtering
+- [ ] More cute stuff
