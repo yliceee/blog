@@ -182,6 +182,30 @@ CLOSED: [2023-11-19 Sun 20:05]
      + The extra ~--~ is to tell ~deploy-rs~ that you are trying to pass the argument ~--impure~ to the underlying ~nixos-rebuild~ call. See ~deploy --help~.
 
 
+* DONE An addendum to a "new" deployment tool
+CLOSED: [2023-11-20 Mon 17:39]
+:PROPERTIES:
+:ID:       5bab398b-4018-48c5-ba08-44809b5367a2
+:EXPORT_FILE_NAME: ./nixos-rebuild
+:END:
+:LOGBOOK:
+- State "DONE"       from              [2023-11-20 Mon 17:39]
+:END:
+There's this [[https://www.haskellforall.com/2023/01/announcing-nixos-rebuild-new-deployment.html][awesome blog-post]] about using ~nixos-rebuild~ to deploy to remote NixOS machines. If you're new to the world of deploying NixOS machines, you might not know that there are [[https://nix-community.github.io/awesome-nix/#deployment-tools][many]].
+
+Some have varying support for flakes, parallel deployments, etc. ~nixos-rebuild~ is not necessarily a solution to all of these problems, but it is a natural (at least on NixOS), [[https://search.nixos.org/packages?channel=23.05&show=nixos-rebuild&from=0&size=50&sort=relevance&type=packages&query=nixos-rebuild][multi-platform]] solution.
+
+However, there is a minor issue. It is recommended to use ~nixos-rebuild~ with ~sudo~ in many cases. If you're using ssh to connect to your remote machine, you need to then pass ~--use-remote-sudo~, like the blog recommends.
+
+It seems, unfortunately, that this flag is [[https://github.com/NixOS/nixpkgs/issues/118655][broken]]:
+#+begin_src bash
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+#+end_src
+
+The solution, then, is to [[id:0a937d68-0ea5-4bf4-90a9-d699e88947a6][exchange SSH keys]] with the root user of your target machines.
+
+Just a minor edit to a good post! :3
 * Footnotes
 :PROPERTIES:
 :ID:       755de290-f056-45e6-81c1-03b2fca41116
