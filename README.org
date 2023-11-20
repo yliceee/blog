@@ -2,16 +2,18 @@
 :PROPERTIES:
 :ID:       89e7bc7f-7120-472d-9dee-bd40b5477103
 :END:
-Mostly, just copy configuration from this theme's [[https://github.com/adityatelange/hugo-PaperMod/blob/exampleSite/config.yml][example configuration]]. A [[file:.github/workflows/hugo.yaml::Sample workflow for building and deploying a Hugo site to GitHub Pages][github workflow]] will automatically update the blog on push.
-
-Remember to export org files with ~ox-hugo~ when finished writing!
+- Mostly, just copy configuration from this theme's [[https://github.com/adityatelange/hugo-PaperMod/blob/exampleSite/config.yml][example configuration]]. A [[file:.github/workflows/hugo.yaml::Sample workflow for building and deploying a Hugo site to GitHub Pages][github workflow]] will automatically update the blog on push.
+- Remember to export org files with ~ox-hugo~ when finished writing!
+- ~hugo server --buildDrafts --navigateToChanged~
+  + Hosted on port 1313
+  + ~--navigateToChanged~ is optional and rather annoying if you're updating the general layout or a whole batch of posts at once
 * Dependencies
 :PROPERTIES:
 :ID:       151f981c-0a74-43b4-9111-6e56816e6b77
 :END:
 - ~go~
 - ~hugo~
-- [ ] Make this a flake with direnv etc
+- [X] Make this a flake with direnv etc
 * Wishlist
 :PROPERTIES:
 :ID:       00e74100-eacd-473e-9c0a-a7aa1a45af9c
