@@ -3,7 +3,7 @@
 :PROPERTIES:
 :ID:       89e7bc7f-7120-472d-9dee-bd40b5477103
 :END:
-Mostly, just copy configuration from this theme's [[https://github.com/adityatelange/hugo-PaperMod/blob/exampleSite/config.yml][example configuration]]. A [[file:.github/workflows/hugo.yaml::Sample workflow for building and deploying a Hugo site to GitHub Pages][github workflow]] will automatically updated the blog on push.
+Mostly, just copy configuration from this theme's [[https://github.com/adityatelange/hugo-PaperMod/blob/exampleSite/config.yml][example configuration]]. A [[file:.github/workflows/hugo.yaml::Sample workflow for building and deploying a Hugo site to GitHub Pages][github workflow]] will automatically update the blog on push.
 
 Remember to export org files with ~ox-hugo~ when finished writing!
 * Dependencies
