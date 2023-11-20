@@ -9,8 +9,7 @@ draft = false
 -   Make a `secrets/` dir and add any `secret.yaml` to it
     -   To make a secret.yaml, set your `$EDITOR` and then run `sops /path/to/secret.yaml`.
 -   Add any client (machine to be deployed to) machine's ssh-to-age public key to `keys:`
-    -   If using `ssh-to-age`, make sure to use the `/etc/ssh/ssh_host_ed25519_key.pub` file as the public key
-        Neither the authorized_keys.d file nor any other public key will be dedicated automatically by sops without more configuration (as of <span class="timestamp-wrapper"><span class="timestamp">[2023-10-03 Tue 17:38]</span></span>)
+    -   If using `ssh-to-age`, make sure to use the `/etc/ssh/ssh_host_ed25519_key.pub` file as the public key. Neither the authorized_keys.d file nor any other public key will be dedicated automatically by sops without more configuration (as of <span class="timestamp-wrapper"><span class="timestamp">[2023-10-03 Tue 17:38]</span></span>)
 -   Add the clients name to `key_groups: -age:`
 -   [?] If you are adding new keys, make sure to run `sops updatekeys filename` to update the recipients of each secret
     -   Not sure if this is necessary tbh. I did have to do it at one point, but who knows if you need to do this on new files created.
