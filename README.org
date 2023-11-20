@@ -19,3 +19,4 @@ Remember to export org files with ~ox-hugo~ when finished writing!
 - [ ] Working [[file:~/git/hugo-PaperMod/content/posts/papermod/papermod-features/index.md::Search Page][search]]
 - [ ] Tags/categories filtering
 - [ ] More cute stuff
+- [ ] Index
