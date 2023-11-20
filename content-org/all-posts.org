@@ -23,6 +23,7 @@ CLOSED: [2023-11-19 Sun 20:05]
   - To make a secret.yaml, set your =$EDITOR= and then run =sops /path/to/secret.yaml=.
 - Add any client (machine to be deployed to) machine's ssh-to-age public key to =keys:=
   - If using =ssh-to-age=, make sure to use the =/etc/ssh/ssh_host_ed25519_key.pub= file as the public key
+    
     Neither the authorized_keys.d file nor any other public key will be dedicated automatically by sops without more configuration (as of [2023-10-03 Tue 17:38])
 - Add the clients name to =key_groups: -age:=
 - [?] If you are adding new keys, make sure to run =sops updatekeys filename= to update the recipients of each secret
