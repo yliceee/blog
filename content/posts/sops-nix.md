@@ -89,7 +89,7 @@ error: opening file '/run/secrets/missing_secret': No such file or directory
 
 ### `neededForUsers` {#neededforusers}
 
-The sops-nix documentation [mentions](https://github.com/Mic92/sops-nix#setting-a-users-password) that some extra settings for secrets needed before users are created, like, especially, a user's password.
+The sops-nix documentation [mentions](https://github.com/Mic92/sops-nix#setting-a-users-password) extra settings for secrets needed before users are created, like, especially, a user's password.
 
 > _The settings for a secret are specified in the (usually empty) attribute set when you declare it:_
 >
