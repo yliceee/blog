@@ -107,7 +107,7 @@ error: opening file '/run/secrets/missing_secret': No such file or directory
 :PROPERTIES:
 :ID:       d0eba60b-a295-463d-aa18-dcaf48ba013f
 :END:
-The sops-nix documentation [[https://github.com/Mic92/sops-nix#setting-a-users-password][mentions]] that some extra settings for secrets needed before users are created, like, especially, a user's password.
+The sops-nix documentation [[https://github.com/Mic92/sops-nix#setting-a-users-password][mentions]] extra settings for secrets needed before users are created, like, especially, a user's password.
 
 #+begin_quote
 /The settings for a secret are specified in the (usually empty) attribute set when you declare it:/
