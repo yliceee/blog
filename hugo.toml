@@ -1,5 +1,5 @@
 baseURL = 'https://rgri.github.io/'
-title = 'web site :)'
+title = "robbi's web site :)"
 languageCode = 'en-us'
 [module]
     [[module.imports]]
