@@ -190,7 +190,7 @@ CLOSED: [2023-11-20 Mon 17:39]
 :LOGBOOK:
 - State "DONE"       from              [2023-11-20 Mon 17:39]
 :END:
-There's this [[https://www.haskellforall.com/2023/01/announcing-nixos-rebuild-new-deployment.html][awesome blog-post]] about using ~nixos-rebuild~ to deploy to remote NixOS machines. If you're new to the world of deploying NixOS machines, you might not know that there are [[https://nix-community.github.io/awesome-nix/#deployment-tools][many]].
+There's this [[https://www.haskellforall.com/2023/01/announcing-nixos-rebuild-new-deployment.html][awesome blog-post]] about using ~nixos-rebuild~ as a tool to deploy to remote NixOS machines. If you're new to the world of deploying NixOS machines, you might not know that there are [[https://nix-community.github.io/awesome-nix/#deployment-tools][many]].
 
 Some have varying support for flakes, parallel deployments, etc. ~nixos-rebuild~ is not necessarily a solution to all of these problems, but it is a natural (at least on NixOS), [[https://search.nixos.org/packages?channel=23.05&show=nixos-rebuild&from=0&size=50&sort=relevance&type=packages&query=nixos-rebuild][multi-platform]] solution.
 
