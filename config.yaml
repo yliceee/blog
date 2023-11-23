@@ -26,8 +26,13 @@ menu:
       - identifier: tags
         name: tags
         url: /tags/
-        weight: 0
+        weight: 2
       - identifier: search
         name: search
         url: /search/
-        weight: 0
+        weight: 1
+
+      - identifier: ask
+        name: ask
+        url: /ask/
+        weight: 4
