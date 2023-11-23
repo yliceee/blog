@@ -7,6 +7,13 @@
 - ~hugo server --buildDrafts --navigateToChanged~
   + Hosted on port 1313
   + ~--navigateToChanged~ is optional and rather annoying if you're updating the general layout or a whole batch of posts at once
+** Settings/customizations
+:PROPERTIES:
+:ID:       298758bf-cf58-44ab-91f7-7f9a7e0069c1
+:END:
+This microblog is made using PaperMod, and can be configured using the settings from these two pages, placed into the [[file:config.yaml][config.yaml]].
+- [[https://adityatelange.github.io/hugo-PaperMod/posts/papermod/papermod-features/][Features]]
+- [[https://adityatelange.github.io/hugo-PaperMod/posts/papermod/papermod-faq/][FAQ]]
 * Dependencies
 :PROPERTIES:
 :ID:       151f981c-0a74-43b4-9111-6e56816e6b77
