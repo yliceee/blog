@@ -14,3 +14,20 @@ params:
     Content: >
       NixOS is hard. Maybe it is bad to use. I am unemployed, so I figured out
       how to do some stuff. This is where I post about it.
+  env: production
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # is necessary
+menu:
+    main:
+      - identifier: tags
+        name: tags
+        url: /tags/
+        weight: 0
+      - identifier: search
+        name: search
+        url: /search/
+        weight: 0
