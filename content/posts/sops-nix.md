@@ -5,6 +5,23 @@ tags = ["nixos", "security", "ATTACH", "howto"]
 draft = false
 +++
 
+<div class="ox-hugo-toc toc">
+
+<div class="heading">Table of Contents</div>
+
+- [Motivation &amp; Concepts](#motivation-and-concepts)
+    - [Concepts](#concepts)
+- [Setup](#setup)
+- [Special cases &amp; further reading](#special-cases-and-further-reading)
+    - [Deploying twice?](#deploying-twice)
+        - [Use a deployment tool](#use-a-deployment-tool)
+        - [Housekeeping](#housekeeping)
+    - [`neededForUsers`](#neededforusers)
+
+</div>
+<!--endtoc-->
+
+
 ## Motivation &amp; Concepts {#motivation-and-concepts}
 
 The concept of "secrets" in a software project is pretty straightforward- it can be anything from SSH keys, API keys, passwords, anything that your project takes as a parameter and you don't want published.

@@ -1,6 +1,7 @@
 :PROPERTIES:
 :ID:       03464369-4a57-478c-ba60-ddf5290f0717
 :END:
+#+EXPORT_OPTIONS: toc:t
 #+title: All Posts
 #+hugo_base_dir: ../
 * DONE How to use =sops-nix= to manage secrets on NixOS :nixos:security:ATTACH:howto:
@@ -9,7 +10,7 @@ CLOSED: [2023-11-19 Sun 20:05]
 :Added:    [2023-10-03 Tue 17:32]
 :ID:       dac881f2-0e60-4644-8628-b208557b5418
 :LINK:     https://github.com/Mic92/sops-nix
-:EXPORT_OPTIONS: toc:nil date:nil author:nil \n
+:EXPORT_OPTIONS: toc:t
 :EXPORT_FILE_NAME: ./sops-nix
 :ORG_ATTACH_FILES: sops-nix.pdf
 :END:
