@@ -4,7 +4,7 @@
 #+EXPORT_OPTIONS: toc:t
 #+title: All Posts
 #+hugo_base_dir: ../
-* DONE How to use =sops-nix= to manage secrets on NixOS :nixos:security:ATTACH:howto:
+* DONE How to use =sops-nix= to manage secrets on NixOS :nixos:security:ATTACH:howto:security:
 CLOSED: [2023-11-19 Sun 20:05]
 :PROPERTIES:
 :Added:    [2023-10-03 Tue 17:32]
@@ -129,7 +129,7 @@ CLOSED: [2023-11-19 Sun 21:28]
 - State "DONE"       from "TODO"       [2023-11-19 Sun 21:28]
 :END:
 NixOS is hard. Maybe it is bad to use. I am unemployed, so I figured out how to do some stuff. This is where I post about it.
-* DONE How to actually exchange SSH keys (passwordless SSH) :linux:howto:
+* DONE How to actually exchange SSH keys (passwordless SSH) :linux:howto:security:
 CLOSED: [2023-11-19 Sun 20:05]
 :PROPERTIES:
 :Added: [2023-11-19 Sun 09:17]
