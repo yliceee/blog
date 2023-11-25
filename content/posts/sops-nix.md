@@ -1,7 +1,7 @@
 +++
 title = "How to use sops-nix to manage secrets on NixOS"
 date = 2023-11-19T20:05:00-06:00
-tags = ["nixos", "security", "ATTACH", "howto"]
+tags = ["nixos", "ATTACH", "howto", "security"]
 draft = false
 +++
 
