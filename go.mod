@@ -1,4 +1,4 @@
-module github.com/rgri/blog
+module github.com/yliceee/blog
 
 go 1.20
 
