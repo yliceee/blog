@@ -32,6 +32,6 @@ There were a few other interesting leads/tricks I discovered throughout the orde
         let pkgsOld = (import inp.nixpkgsOld { config.allowUnfree = true; }); in ...
     ```
 -   Experiment with `--store` and `--eval-store` to speed up builds!
-    -   URL syntax for these flags is: `--store 'ssh://HOST'`, etc.
+    -   URL syntax for these flags is: `--store 'ssh://HOST'`.
 -   Hydra stuff
     -   When Hydra evaluates branches of Nixpkgs, any evaluations that succeed are immediately deposited in [cache.nixos.org](https://cache.nixos.org)
