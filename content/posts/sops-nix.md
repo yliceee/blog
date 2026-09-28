@@ -16,7 +16,7 @@ draft = false
     - [Deploying twice?](#deploying-twice)
         - [Use a deployment tool](#use-a-deployment-tool)
         - [Housekeeping](#housekeeping)
-    - [`neededForUsers`](#neededforusers)
+    - [Managing user secrets: `neededForUsers`](#managing-user-secrets-neededforusers)
 
 </div>
 <!--endtoc-->
@@ -44,38 +44,42 @@ The manual is very comprehensive, but the basic idea is the following:
 
 ## Setup {#setup}
 
-1.  Make .sops.yaml file with your host('s) public key of choice (you can use age, or the tool `ssh-age`)
+1.  Make a .sops.yaml file with your hosts(') public key of choice (you can use age, or the tool `ssh-age`)
 2.  Make a `secrets/` dir and add any `secret.yaml` to it
     -   To make a secret.yaml, set your `$EDITOR` and then run `sops /path/to/secret.yaml`.
-3.  Add any client (_machine to be deployed to_) machine's public key to `keys:`
-    -   If using `ssh-to-age`, make sure to use the `/etc/ssh/ssh_host_ed25519_key.pub` file as the input public key. Neither the authorized_keys.d file nor any other public key will be dedicated automatically by sops without more configuration (as of <span class="timestamp-wrapper"><span class="timestamp">[2023-10-03 Tue 17:38]</span></span>)
+3.  Add any client (_to be deployed to_) machine's  public key to `keys:`
+    -   If using `ssh-to-age`, make sure to use the `/etc/ssh/ssh_host_ed25519_key.pub` file as the input public key. Neither the `authorized_keys.d` file nor any other public key will be detected automatically by sops without more configuration (as of <span class="timestamp-wrapper"><span class="timestamp">[2023-10-03 Tue 17:38]</span></span>)
 4.  Add the clients name to `key_groups: -age:`
-5.  [?] If you are adding new keys, make sure to run `sops updatekeys filename` to update the recipients of each secret
-    -   Not sure if this is necessary tbh. I did have to do it at one point, but who knows if you need to do this on new files created.
-6.  Add `sops.defaultSopsFile = /path/to/secret.yaml;` to configuration.nix
-7.  Add `sops.age.keyFile = /path/to/age/keys.txt;` to configuration.nix
-    -   Frequently, this will be `/home/username/.config/sops/age/keys.txt;`
-8.  **For each secret "key_name" in secret.yaml** add `sops.secrets.key_name = { };` to configuration.nix
-9.  At runtime, secrets are placed in plaintext files in `/run/secrets`
-10. Refer to secrets by using `"${builtins.readFile /run/secrets/secretname}"`
-    This is using _string interpolation_ and a builtin "read form file" function to get the contents of the plaintext secrets
-11. As of time of writing (<span class="timestamp-wrapper"><span class="timestamp">[2023-10-03 Tue 17:41]</span></span>) I still don't understand services.
+5.  If you are adding new keys, make sure to run `sops updatekeys /path/to/secret.yaml` to re-encrypt the existing secrets
+6.  Set the following options in configuration.nix:
+    ```nix
+       {
+           sops.defaultSopsFile = /path/to/secret.yaml;
+           sops.age.keyFile = /path/to/age/keys.txt;
+       }
+    ```
+
+    -   Frequently, `/path/to/age/keys.txt` will be `/home/<username>/.config/sops/age/keys.txt;`
+
+7.  **For each secret "key_name" in secret.yaml** add `sops.secrets.key_name = { };` to configuration.nix
+
+At build time, secrets are placed in plaintext files under `/run/secrets`. Refer to secret values in `configuration.nix` by using `"${builtins.readFile /run/secrets/secretname}"`.
 
 
 ## Special cases &amp; further reading {#special-cases-and-further-reading}
 
 This post isn't meant to be comprehensive. The (frankly exhaustive) sops-nix documentation should be the first and final source on its configuration.
 
-However, there are a few special cases to mention to save a few web searches.
+However, there are a few special cases worth mentioning.
 
 
 ### Deploying twice? {#deploying-twice}
 
-Something you may notice is that if you attempt to switch to a configuration that both declares new secrets and uses said secrets at the same time, it will fail.
+Something you may notice is that if you attempt to switch to a configuration that both declares new secrets and references said secrets at the same time, evaluation will fail.
 
-This is because the method used in this post to refer to secrets (`builtins.readFile /run/secrets/...`) depends on the secrets already being there- which doesn't happen until nix has fully evaluated a valid configuration that declares them.
+This is because the method used in this post to refer to secrets (`builtins.readFile /run/secrets/...`) depends on the secrets already existing under that directory- which isn't the case until nix has fully evaluated a valid configuration that declares them.
 
-What this means practically is that you need to first switch to a configuration which declares the secrets ([step four](#concepts)) and _then_ switch to a configuration that uses them. There's some more nuance and tricks relating to this, however.
+What this means practically is that you need to first switch to a configuration which declares the secrets ([step four](#concepts)) and only _then_ switch to a configuration that references them. There are a few more nuances and tricks relating to this.
 
 
 #### Use a deployment tool {#use-a-deployment-tool}
@@ -93,18 +97,18 @@ Because secret substitution (interpolation) happens at evaluation time, if you b
 
 #### Housekeeping {#housekeeping}
 
-It's always a good idea to store your secrets in one [module](https://nixos.wiki/wiki/NixOS_modules)[^fn:2].
+If you opt to dedicate one of your machines as a builder for multiple configurations, it might be a good idea to store your secrets in one [module](https://nixos.wiki/wiki/NixOS_modules).
 
-This way, you can be sure you've actually included all of your secrets, and don't have to go hunting through your configuration.
+This way, you can be sure you've actually included all of your secrets, and don't have to hunt through your configuration.
 
-Though, of course, NixOS will give you an error if one is missing, and the message is actually helpful:
+Though, of course, NixOS will give you an error if one is missing, and the message is uncharacteristically helpful:
 
 ```bash
 error: opening file '/run/secrets/missing_secret': No such file or directory
 ```
 
 
-### `neededForUsers` {#neededforusers}
+### Managing user secrets: `neededForUsers` {#managing-user-secrets-neededforusers}
 
 The sops-nix documentation [mentions](https://github.com/Mic92/sops-nix#setting-a-users-password) extra settings for secrets needed before users are created, like, especially, a user's password.
 
@@ -116,5 +120,6 @@ The sops-nix documentation [mentions](https://github.com/Mic92/sops-nix#setting-
 > };
 > ```
 
-[^fn:1]: Also see the useful [nix-pill](https://nixos.org/guides/nix-pills/basics-of-language#id1364) about it
-[^fn:2]: _Yes_, I'm linking to the frequently out-of-date, never-use, no-good-very-bad NixOS wiki. But in this case, its basic description of modules is straight to the point.
+In particular, when a secret is required before users are bootstrapped, you must set its `neededForUsers` to `true`.
+
+[^fn:1]: Also see this useful [nix-pill](https://nixos.org/guides/nix-pills/04-basics-of-language.html#strings)
