@@ -51,7 +51,7 @@ The manual is very comprehensive, but the basic idea is the following:
    - To make a secret.yaml, set your =$EDITOR= and then run =sops /path/to/secret.yaml=.
 3. Add any client (/to be deployed to/) machine's  public key to =keys:=
    - If using =ssh-to-age=, make sure to use the =/etc/ssh/ssh_host_ed25519_key.pub= file as the input public key. Neither the ~authorized_keys.d~ file nor any other public key will be detected automatically by sops without more configuration (as of [2023-10-03 Tue 17:38])
-4. Add the clients name to =key_groups: -age:=
+4. Add the client's name to =key_groups: -age:=
 5. If you are adding new keys, make sure to run =sops updatekeys /path/to/secret.yaml= to re-encrypt the existing secrets
 6. Set the following options in configuration.nix:
    #+begin_src nix
@@ -132,7 +132,7 @@ CLOSED: [2023-11-19 Sun 21:28]
 :LOGBOOK:
 - State "DONE"       from "TODO"       [2023-11-19 Sun 21:28]
 :END:
-NixOS is hard. Maybe it is bad to use. I am unemployed, so I figured out how to do some stuff. This is where I post about it.
+NixOS is hard. Maybe it is bad to use. I am unemployed, so I figured out how to do some stuff. This is where I post about that.
 * DONE How to actually exchange SSH keys (passwordless SSH) :linux:howto:security:
 CLOSED: [2023-11-19 Sun 20:05]
 :PROPERTIES:
@@ -162,29 +162,33 @@ CLOSED: [2023-11-19 Sun 20:05]
 - State "DONE"       from              [2023-11-19 Sun 20:05]
 - Refiled on [2023-11-19 Sun 20:02]
 :END:
-1. [[id:0a937d68-0ea5-4bf4-90a9-d699e88947a6][Exchange SSH keys]] between the appropriate users (root on the target machine, if you intend to use ~nixpkgs.lib.nixosSystem~-created configurations).
+1. [[id:0a937d68-0ea5-4bf4-90a9-d699e88947a6][Exchange SSH keys]] between the appropriate users (root on the client machine, if you intend to use ~nixpkgs.lib.nixosSystem~-created configurations).
 2. Add a ~deploy~ output like:
    #+begin_src nix
-    deploy.nodes = {
-    host_name = {
-        hostname = "${builtins.readFile /run/secrets/host_name_ip}";
-        profiles.system = {
-        user = "root";
-        path = deploy-rs.lib.x86_64-linux.activate.nixos
-            self.nixosConfigurations.host_name;
+{
+  ...
+        deploy.nodes = {
+        host_name = {
+            hostname = "${builtins.readFile /run/secrets/host_name_ip}";
+            profiles.system = {
+            user = "root";
+            path = deploy-rs.lib.x86_64-linux.activate.nixos
+                self.nixosConfigurations.host_name;
+            };
         };
-    };
-    # ... more nodes ...
-    };
+        # ... more nodes ...
+        };
+  ...
+}
    #+end_src
    - The ~builtins...~ interpolation isn't needed if you don't manage your secrets appropriately with ~sops-nix~.
-3. Add ~deploy-rs~ as a flake input the usual way
-4. Add the ~deploy-rs~ binary *from the flake input* like you would with other flake-installed binaries (thorium, etc.)
-   - If you just use the ~deploy-rs~ that comes with ~nixpkgs~ or a random ~nix-shell~, you will have a ton of weird issues
+3. Add [[https://github.com/serokell/deploy-rs][deploy-rs]] as a flake input the usual way
+4. Add the deploy-rs binary *from the flake input* to the list of installed packages, like you would with other flake-installed binaries (thorium, etc.)
+   - If you just use the deploy-rs that comes with ~nixpkgs~ or a random ~nix-shell~, you will have a ton of weird issues
 5. Use ~sudo deploy . -- --impure~ to deploy to your machines
    - ~sudo~ is only necessary if you need to deploy secrets kept in /run, like with ~sops-nix~ (since /run needs root access to read from)
    - ~-- --impure~ is only necessary if you have flake impurities (like sops secrets)
-     + The extra ~--~ is to tell ~deploy-rs~ that you are trying to pass the argument ~--impure~ to the underlying ~nixos-rebuild~ call. See ~deploy --help~.
+     + The extra ~--~ is to tell deploy-rs that you are trying to pass the argument ~--impure~ to the underlying ~nixos-rebuild~ call. See ~deploy --help~.
 
 * DONE An addendum to a "new" deployment tool
 CLOSED: [2023-11-20 Mon 17:39]
@@ -207,9 +211,9 @@ sudo: a terminal is required to read the password; either use the -S option to r
 sudo: a password is required
 #+end_src
 
-The solution, then, is to [[id:0a937d68-0ea5-4bf4-90a9-d699e88947a6][exchange SSH keys]] with the root user of your target machines.
+The solution, then, is to [[id:0a937d68-0ea5-4bf4-90a9-d699e88947a6][exchange SSH keys]] with the root user of your client machines.
 
-Just a minor edit to a good post! :3
+Just a minor edit to a good post!
 * Footnotes
 :PROPERTIES:
 :ID:       755de290-f056-45e6-81c1-03b2fca41116
@@ -230,7 +234,7 @@ CLOSED: [2023-11-22 Wed 11:57]
 :END:
 I recently spent some time trying to install gnome 45 on my NixOS laptop (which is finally [[https://github.com/NixOS/nixpkgs/pull/247766][merged]] 🥳 thank you NixOS contributors!)
 
-Unfortunately doing so was kind of a pain in my setup. My laptop is an under-powered machine with only 8GB of RAM, and although my desktop has quite a bit more RAM (and a better processor) its NixOS partition is currently a measly 100GB.
+Unfortunately doing so was kind of a pain with my setup. My laptop is an under-powered machine with only 8GB of RAM, and although my desktop has quite a bit more RAM (and a better processor), its NixOS partition is currently a measly 100GB.
 
 So, building it from source was kind of out of the question on my desktop, and it would take forever on my laptop.
 
@@ -240,12 +244,10 @@ I learned that you can not only specify different versions of Nixpkgs in the sam
 
 When doing this, it may be necessary to pass in extra configuration arguments to the version of Nixpkgs you use for packages. In my case, I use a few unfree packages (like Spotify). Here's how I did that:
 #+begin_src nix
-pkgs = (import inp.nixpkgsForPackages {config.allowUnfree = true;});
+let pkgs = (import inp.nixpkgsForPackages {config.allowUnfree = true;}); in ... 
 #+end_src
 
-#+begin_quote
 There were a few other interesting leads/tricks I discovered throughout the ordeal, which I've included below.
-#+end_quote
 ** Tricks
 :PROPERTIES:
 :ID:       c3bd30f1-cb3b-4804-945d-56a636a67f91
@@ -256,10 +258,9 @@ There were a few other interesting leads/tricks I discovered throughout the orde
 - Foregoing switching to a configuration until boot (instead of activating while the machine is running) saves memory, time, and is less stressful when trying to conserve disk space
 - You can just fully ~(import inp.nixpkgsForPackages {args_go_here})~ in configuration.nix, and pass any ~config.STUFF~ arguments in at ~args_go_here~. This is useful for example when trying to allow unfree configs:
   #+begin_src nix
-  pkgsOld = (import inp.nixpkgsOld { config.allowUnfree = true; });
+  let pkgsOld = (import inp.nixpkgsOld { config.allowUnfree = true; }); in ...
   #+end_src
 - Experiment with ~--store~ and ~--eval-store~ to speed up builds!
   - URL syntax for these flags is: ~--store 'ssh://HOST'~, etc.
 - Hydra stuff
-  - When Hydra evaluates branches of Nixpkgs, any evaluations that succeed are immediately deposited in the [[id:4b5e2759-4bb3-4ffb-8f1b-4690695224de][cache.nixos.org]]
-- Gnome 45 works now, and is in master!
+  - When Hydra evaluates branches of Nixpkgs, any evaluations that succeed are immediately deposited in [[https://cache.nixos.org][cache.nixos.org]]

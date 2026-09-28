@@ -19,6 +19,6 @@ sudo: a terminal is required to read the password; either use the -S option to r
 sudo: a password is required
 ```
 
-The solution, then, is to [exchange SSH keys]({{< relref "ssh-keys" >}}) with the root user of your target machines.
+The solution, then, is to [exchange SSH keys]({{< relref "ssh-keys" >}}) with the root user of your client machines.
 
-Just a minor edit to a good post! :3
+Just a minor edit to a good post!

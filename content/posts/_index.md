@@ -7,4 +7,4 @@ type = "homepage"
 draft = false
 +++
 
-NixOS is hard. Maybe it is bad to use. I am unemployed, so I figured out how to do some stuff. This is where I post about it.
+NixOS is hard. Maybe it is bad to use. I am unemployed, so I figured out how to do some stuff. This is where I post about that.
